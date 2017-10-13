@@ -1,0 +1,12 @@
+---
+- ec2_remote_facts:
+    region: "{{region}}"
+    filters:
+      instance-state-name: running
+      "tag:Name": "{{instance_name}}"
+  register: result
+
+- add_host:
+    name: "{{item.private_ip_address}}"
+    groups: "{{hostgroup}}"
+  with_items: "{{result.instances}}"
